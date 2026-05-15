@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File
 from app.services.s3_service import upload_file_to_s3
+from app.services.candidate_service import save_candidate
 from app.services.resume_parser import (
     extract_text_from_pdf,
     clean_resume_text
@@ -14,7 +15,10 @@ router = APIRouter(
     tags=["Resume"]
 )
 
+
+
 UPLOAD_DIR = "uploads"
+
 
 @router.post("/upload")
 async def upload_resume(file: UploadFile = File(...)):
@@ -43,6 +47,13 @@ async def upload_resume(file: UploadFile = File(...)):
             uploaded_file,
             file.filename
         )
+
+    candidate = save_candidate(
+        filename=file.filename,
+        file_url=file_url,
+        skills=skills,
+        ats_score=0
+    )
 
     return {
         "filename": file.filename,
