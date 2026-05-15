@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer | Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">AI Resume <span>Intelligence</span></div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Upload Portal</a>
+            <a href="recruiter.html" class="btn-nav">Recruiter Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Analyze Your <span>Potential</span></h1>
+        
+        <div class="card">
+            <div class="upload-box">
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 10px;">
+                    Upload your PDF resume to get an AI-powered skill analysis and ATS score.
+                </p>
+                <input type="file" id="resumeFile" accept=".pdf">
+                <button onclick="uploadResume()">Run Analysis</button>
+            </div>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
