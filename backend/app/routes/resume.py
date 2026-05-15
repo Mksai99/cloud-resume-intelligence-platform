@@ -4,9 +4,10 @@ from app.services.resume_parser import (
     extract_text_from_pdf,
     clean_resume_text
 )
+from app.services.comprehend_service import detect_entities
+from app.utils.skill_extractor import extract_skills
 
 import shutil
-import os
 
 router = APIRouter(
     prefix="/resume",
@@ -24,11 +25,17 @@ async def upload_resume(file: UploadFile = File(...)):
     with open(local_file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Extract raw text
+    # Extract text
     extracted_text = extract_text_from_pdf(local_file_path)
 
     # Clean text
     cleaned_text = clean_resume_text(extracted_text)
+
+    # Detect AWS entities
+    entities = detect_entities(extracted_text)
+
+    # Extract technical skills
+    skills = extract_skills(cleaned_text)
 
     # Upload to S3
     with open(local_file_path, "rb") as uploaded_file:
@@ -40,7 +47,7 @@ async def upload_resume(file: UploadFile = File(...)):
     return {
         "filename": file.filename,
         "file_url": file_url,
-        "raw_text_preview": extracted_text[:1000],
-        "cleaned_text_preview": cleaned_text[:1000],
-        "message": "Resume processed successfully"
+        "skills_detected": skills,
+        "entities_detected": entities[:10],
+        "message": "Resume analyzed successfully"
     }
